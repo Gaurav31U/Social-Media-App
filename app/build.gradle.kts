@@ -48,18 +48,29 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Add this line for Google Sign-In
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+
     // Coroutines
-    implementation(libs.kotlinx.coroutines.core) // Or specify a version directly, e.g., "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
-    implementation(libs.kotlinx.coroutines.android) // For Android specific main dispatcher
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
+    // Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
+
+    // Firebase Authentication
+    implementation("com.google.firebase:firebase-auth")
+
+    // Credential Manager libraries (you can keep these)
+    implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
+    // Room and Lifecycle dependencies
     implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.compiler){
-        exclude(group = "com.intellij", module = "annotations")
-    }
     kapt(libs.androidx.room.compiler)
-
-    // Lifecycle scopes
-    implementation(libs.androidx.lifecycle.viewmodel.ktx) // For ViewModelScope
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 }

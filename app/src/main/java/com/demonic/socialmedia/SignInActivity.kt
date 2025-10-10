@@ -1,12 +1,39 @@
 package com.demonic.socialmedia
 
+import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class SignInActivity : AppCompatActivity() {
+
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private val RC_SIGN_IN = 123
+    private lateinit var auth: FirebaseAuth
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -17,6 +44,76 @@ class SignInActivity : AppCompatActivity() {
             insets
         }
 
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+        auth = FirebaseAuth.getInstance() // Initialize FirebaseAuth
+
+        val signInButton = findViewById<SignInButton>(R.id.signInButton)
+        signInButton.setOnClickListener {
+            signIn()
+        }
+    }
+
+    private fun signIn(){
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        }
+    }
+
+    private fun handleSignInResult(task: Task<GoogleSignInAccount>) {
+        try {
+            val account = task.getResult(ApiException::class.java)
+            Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
+            firebaseAuthWithGoogle(account.idToken!!)
+        } catch (e: ApiException) {
+            Log.w(TAG, "Google sign in failed", e)
+
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        val signInButton = findViewById<SignInButton>(R.id.signInButton)
+        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
+        signInButton.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val authResult = auth.signInWithCredential(credential).await()
+            val firebaseUser = authResult.user
+            // You can now use the firebaseUser object
+            // To update UI, switch back to the Main thread
+            withContext(Dispatchers.Main) {
+                // e.g., Update UI, navigate to another activity
+                updateUI(firebaseUser)
+            }
+        }
+    }
+
+    private fun CoroutineScope.updateUI(firebaseUser: FirebaseUser?) {
+        if(firebaseUser != null){
+            val mainActivityIntent = Intent(this@SignInActivity, MainActivity::class.java)
+            startActivity(mainActivityIntent)
+            finish()
+        }else{
+            val signInButton = findViewById<SignInButton>(R.id.signInButton)
+            val progressBar = findViewById<ProgressBar>(R.id.progressBar)
+            signInButton.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
+            Log.d(TAG, "updateUI: failed")
+        }
 
     }
 }

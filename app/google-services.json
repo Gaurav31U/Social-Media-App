@@ -12,7 +12,12 @@
           "package_name": "com.demonic.socialmedia"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "973823764269-7jt2n09o8djbb10i937ibjao34bkbua4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDWvK5g6a1x0_g2mWyJEJhYdEFKrEX49Dw"
@@ -20,7 +25,41 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "973823764269-7jt2n09o8djbb10i937ibjao34bkbua4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:973823764269:android:ba3e67e4e87496bd7195a4",
+        "android_client_info": {
+          "package_name": "com.demonic.sociamedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "973823764269-7jt2n09o8djbb10i937ibjao34bkbua4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWvK5g6a1x0_g2mWyJEJhYdEFKrEX49Dw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "973823764269-7jt2n09o8djbb10i937ibjao34bkbua4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "973823764269",
+    "project_id": "social-media-f3454",
+    "storage_bucket": "social-media-f3454.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:973823764269:android:f53c4c10743a35a77195a4",
+        "android_client_info": {
+          "package_name": "com.demonic.socialmedia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWvK5g6a1x0_g2mWyJEJhYdEFKrEX49Dw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,6 +10,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.demonic.socialmedia.daos.UserDao
+import com.demonic.socialmedia.models.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -58,6 +60,12 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        updateUI(currentUser)
+    }
+
     private fun signIn(){
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
@@ -93,17 +101,18 @@ class SignInActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.IO) {
             val authResult = auth.signInWithCredential(credential).await()
             val firebaseUser = authResult.user
-            // You can now use the firebaseUser object
-            // To update UI, switch back to the Main thread
             withContext(Dispatchers.Main) {
-                // e.g., Update UI, navigate to another activity
                 updateUI(firebaseUser)
             }
         }
     }
 
-    private fun CoroutineScope.updateUI(firebaseUser: FirebaseUser?) {
+    private fun updateUI(firebaseUser: FirebaseUser?) {
         if(firebaseUser != null){
+            val user = User(firebaseUser.uid, firebaseUser.displayName, firebaseUser.photoUrl.toString())
+            val userDao = UserDao()
+            userDao.addUser(user)
+
             val mainActivityIntent = Intent(this@SignInActivity, MainActivity::class.java)
             startActivity(mainActivityIntent)
             finish()

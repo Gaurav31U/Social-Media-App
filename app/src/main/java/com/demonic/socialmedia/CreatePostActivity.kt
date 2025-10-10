@@ -10,13 +10,14 @@ import androidx.core.view.WindowInsetsCompat
 import com.demonic.socialmedia.daos.PostDao
 
 class CreatePostActivity : AppCompatActivity() {
-    private lateinit var postDao = PostDao()
+    private lateinit var postDao: PostDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_create_post)
 
+        postDao = PostDao()
         val postButton = findViewById<Button>(R.id.postButton)
         postButton.setOnClickListener {
             val input = findViewById<EditText>(R.id.postInput)
@@ -25,8 +26,10 @@ class CreatePostActivity : AppCompatActivity() {
                 postDao.addPost(inputText)
                 finish()
             }
-
-
         }
+        setUpRecyclerView()
+    }
+    private fun setUpRecyclerView() {
+
     }
 }

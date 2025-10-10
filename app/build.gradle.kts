@@ -48,6 +48,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("com.firebaseui:firebase-ui-firestore:8.0.2")
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     // Add this line for Google Sign-In
     implementation("com.google.android.gms:play-services-auth:21.2.0")

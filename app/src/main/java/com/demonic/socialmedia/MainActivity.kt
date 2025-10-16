@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.demonic.socialmedia.daos.PostDao
 import com.demonic.socialmedia.models.Post
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -34,12 +35,18 @@ class MainActivity : AppCompatActivity(), IPostAdapter {
         postDao = PostDao()
         val postsCollections = postDao.postCollections
         val query = postsCollections.orderBy("createdAt", Query.Direction.DESCENDING)
-        val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Post>().setQuery(query, Post::class.java).build()
+
+        val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Post>()
+            .setQuery(query, Post::class.java)
+            .setLifecycleOwner(this)
+            .build()
 
         adapter = PostAdapter(recyclerViewOptions, this)
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        recyclerView.itemAnimator = null
     }
 
     override fun onStart() {

@@ -30,7 +30,11 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, val listener: IPostAd
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val viewHolder =  PostViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_post, parent, false))
         viewHolder.likeButton.setOnClickListener{
-            listener.onLikeClicked(snapshots.getSnapshot(viewHolder.adapterPosition).id)
+            val position = viewHolder.bindingAdapterPosition
+            // Check if the position is still valid before using it
+            if(position != RecyclerView.NO_POSITION) {
+                listener.onLikeClicked(snapshots.getSnapshot(position).id)
+            }
         }
         return viewHolder
     }

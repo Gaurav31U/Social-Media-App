@@ -66,6 +66,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
 
     // Credential Manager libraries (you can keep these)
+    implementation("com.google.firebase:firebase-analytics")
     implementation("androidx.credentials:credentials:1.3.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")

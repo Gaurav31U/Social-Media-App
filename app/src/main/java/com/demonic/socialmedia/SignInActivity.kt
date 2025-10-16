@@ -48,7 +48,6 @@ class SignInActivity : AppCompatActivity() {
 
         val signInButton = findViewById<SignInButton>(R.id.signInButton)
         signInButton.setOnClickListener {
-            Toast.makeText(this, "Signing In", Toast.LENGTH_SHORT).show()
             signIn()
         }
 
@@ -64,7 +63,6 @@ class SignInActivity : AppCompatActivity() {
         try {
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
-            Toast.makeText(this," Ok Here#1", Toast.LENGTH_SHORT).show()
         }catch (e: ApiException) {
             Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
         }}
@@ -73,7 +71,6 @@ class SignInActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
-            Toast.makeText(this," Ok Here#2", Toast.LENGTH_SHORT).show()
             try {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(data)
                 handleSignInResult(task)
@@ -85,12 +82,10 @@ class SignInActivity : AppCompatActivity() {
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
-            Toast.makeText(this," Ok Here#3", Toast.LENGTH_SHORT).show()
             val account =
                 completedTask.getResult(ApiException::class.java)!!
             Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
             firebaseAuthWithGoogle(account.idToken!!)
-            Toast.makeText(this," Ok Here#4", Toast.LENGTH_SHORT).show()
         } catch (e: ApiException) {
             Log.w(TAG, "signInResult:failed code=" + e.statusCode + " " + e.message + " :Msg End")
 
@@ -104,7 +99,6 @@ class SignInActivity : AppCompatActivity() {
 
         signInButton.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
-        Toast.makeText(this,"ok here#5",Toast.LENGTH_SHORT).show()
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val auth = auth.signInWithCredential(credential).await()
